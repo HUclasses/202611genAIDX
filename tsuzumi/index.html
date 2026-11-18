@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>鼓門をつまみで描く（p5.js）</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+<style>
+  :root { --g:#d2da22; --k:#000; --m:#595757; --l:#efefef; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:'Noto Sans JP',sans-serif; color:var(--k); background:#fff; }
+  header { padding:16px 20px 8px; border-left:12px solid var(--g); margin:16px 16px 8px; }
+  header h1 { font-size:22px; font-weight:900; margin:0 0 4px; }
+  header p { margin:0; font-size:14px; color:var(--m); line-height:1.6; }
+  main { display:flex; flex-wrap:wrap; gap:16px; padding:8px 16px 24px; }
+  #stage { flex:1 1 360px; max-width:640px; }
+  #stage canvas { width:100% !important; height:auto !important; display:block; border:2px solid #b5b5b6; }
+  #panel { flex:1 1 280px; max-width:420px; display:flex; flex-direction:column; gap:14px; }
+  .row label { display:flex; justify-content:space-between; font-size:15px; font-weight:700; }
+  .row label span { font-weight:400; font-variant-numeric:tabular-nums; }
+  .row input[type=range] { width:100%; height:32px; accent-color:#000; }
+  .btns { display:flex; flex-wrap:wrap; gap:8px; }
+  button { font:inherit; font-size:14px; font-weight:700; padding:10px 14px; border:2px solid var(--k); background:#fff; cursor:pointer; }
+  button.on { background:var(--g); }
+  pre { background:var(--l); padding:12px; font-size:13px; line-height:1.5; overflow:auto; margin:0; }
+  .note { font-size:13px; color:var(--m); line-height:1.6; margin:0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>鼓門を、つまみで描いてみよう</h1>
+  <p>AIに「鼓門を描いて」と頼む代わりに、形を数字で決めて描きます。つまみを動かして、いちばん鼓門らしい形を探してください。</p>
+</header>
+<main>
+  <div id="stage"></div>
+  <div id="panel">
+    <div class="row"><label>ねじれ <span id="v-twist"></span></label><input id="twist" type="range" min="0" max="3.2" step="0.05" value="1.6"></div>
+    <div class="row"><label>板の本数 <span id="v-n"></span></label><input id="n" type="range" min="6" max="40" step="1" value="20"></div>
+    <div class="row"><label>柱の太さ <span id="v-r"></span></label><input id="r" type="range" min="30" max="140" step="1" value="90"></div>
+    <div class="row"><label>柱の間隔 <span id="v-gap"></span></label><input id="gap" type="range" min="200" max="420" step="1" value="320"></div>
+    <div class="row"><label>線の太さ <span id="v-w"></span></label><input id="w" type="range" min="1" max="8" step="0.5" value="3"></div>
+    <div class="btns" id="themes">
+      <button data-t="white" class="on">白地</button>
+      <button data-t="green">緑の面</button>
+      <button data-t="black">黒地</button>
+    </div>
+    <div class="btns"><button id="reset">最初に戻す</button><button id="showcode">数字を見る</button></div>
+    <pre id="code" hidden></pre>
+    <p class="note">柱は、上の円と下の円を直線で結んでいるだけです。上と下で円をずらす角度が「ねじれ」です。ずらすほど、真ん中がくびれます。</p>
+  </div>
+</main>
+<script>
+const W = 600, H = 800;
+const DEF = { twist:1.6, n:20, r:90, gap:320, w:3 };
+let theme = 'white';
+const $ = id => document.getElementById(id);
+const P = () => ({ twist:+$('twist').value, n:+$('n').value, r:+$('r').value, gap:+$('gap').value, w:+$('w').value });
+const THEMES = {
+  white: { bg:'#ffffff', front:'#000000', back:'#b5b5b6', roof:'#000000', accent:'#d2da22' },
+  green: { bg:'#d2da22', front:'#000000', back:'#8f9618', roof:'#000000', accent:'#ffffff' },
+  black: { bg:'#000000', front:'#d2da22', back:'#4d5112', roof:'#d2da22', accent:'#ffffff' },
+};
+
+function setup() {
+  const c = createCanvas(W, H);
+  c.parent('stage');
+  pixelDensity(2);
+  noLoop();
+  for (const k of Object.keys(DEF)) $(k).addEventListener('input', redraw);
+  document.querySelectorAll('#themes button').forEach(b => b.addEventListener('click', () => {
+    theme = b.dataset.t;
+    document.querySelectorAll('#themes button').forEach(x => x.classList.toggle('on', x === b));
+    redraw();
+  }));
+  $('reset').addEventListener('click', () => { for (const k in DEF) $(k).value = DEF[k]; redraw(); });
+  $('showcode').addEventListener('click', () => { $('code').hidden = !$('code').hidden; redraw(); });
+}
+
+// 1本の柱：上の円と下の円を、角度をずらした直線で結ぶ（左右2方向）
+function pillar(cx, yTop, yBot, r, n, twist, t, w) {
+  const ry = 0.18, segs = [];
+  for (const dir of [1, -1]) {
+    for (let i = 0; i < n; i++) {
+      const a = TWO_PI * i / n, b = a + dir * twist;
+      const x1 = cx + r * cos(a), y1 = yTop + r * ry * sin(a);
+      const x2 = cx + r * cos(b), y2 = yBot + r * ry * sin(b);
+      segs.push({ depth: (sin(a) + sin(b)) / 2, x1, y1, x2, y2 });
+    }
+  }
+  segs.sort((p, q) => p.depth - q.depth);           // 奥の線から先に描く
+  strokeWeight(w);
+  for (const s of segs) {
+    stroke(s.depth > -0.1 ? t.front : t.back);
+    line(s.x1, s.y1, s.x2, s.y2);
+  }
+}
+
+function draw() {
+  const p = P(), t = THEMES[theme];
+  background(t.bg);
+  const cx = W / 2, yTop = 170, yBot = H - 90;
+  noStroke();
+  fill(t.roof);   rect(cx - p.gap / 2 - p.r - 40, 110, p.gap + 2 * p.r + 80, 26);   // 屋根の梁
+  fill(t.accent); rect(cx - p.gap / 2 - p.r - 20, 148, p.gap + 2 * p.r + 40, 12);
+  pillar(cx - p.gap / 2, yTop, yBot, p.r, p.n, p.twist, t, p.w);
+  pillar(cx + p.gap / 2, yTop, yBot, p.r, p.n, p.twist, t, p.w);
+  noStroke(); fill(t.roof); rect(40, yBot, W - 80, 6);                               // 地面
+  $('v-twist').textContent = p.twist.toFixed(2);
+  $('v-n').textContent = p.n;
+  $('v-r').textContent = p.r;
+  $('v-gap').textContent = p.gap;
+  $('v-w').textContent = p.w;
+  $('code').textContent =
+`// いまの形を決めている数字
+ねじれ   = ${p.twist.toFixed(2)}  // 上と下で円をずらす角度（ラジアン）
+板の本数 = ${p.n}
+柱の太さ = ${p.r}
+柱の間隔 = ${p.gap}
+線の太さ = ${p.w}
+配色     = ${theme}`;
+}
+</script>
+</body>
+</html>

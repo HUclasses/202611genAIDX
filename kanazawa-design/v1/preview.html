@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>金沢版DESIGN.md「木色」プレビュー</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@700&display=swap">
+<style>
+  /* ===== DESIGN.md のトークンをそのまま CSS 変数にしたもの ===== */
+  :root{
+    --mokujiki-950:#F6F3F1; --mokujiki-900:#F0E7DF; --mokujiki-800:#E2D3C5;
+    --mokujiki-700:#BEAA99; --mokujiki-500:#90745E; --mokujiki-400:#775B44;
+    --sumi-700:#53453B; --sumi-900:#382F2A;
+    --bengara-600:#733529; --bengara-700:#612C26;
+    --kinpaku-400:#C3AB7B; --ai-700:#404857; --koke-700:#505642; --shu-500:#8F4D4C;
+    --primary:var(--bengara-600); --primary-hover:var(--bengara-700);
+    --surface:var(--mokujiki-950); --surface-container:var(--mokujiki-900);
+    --surface-container-high:var(--mokujiki-800);
+    --outline:var(--mokujiki-500); --outline-variant:var(--mokujiki-700);
+    --on-surface:var(--sumi-900); --on-surface-variant:var(--sumi-700);
+    --link:var(--ai-700); --success:var(--koke-700); --error:var(--shu-500);
+    --sans:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
+    --serif:"Noto Serif JP","Hiragino Mincho ProN","Yu Mincho",serif;
+  }
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  body{margin:0;background:var(--surface);color:var(--on-surface);font-family:var(--sans);
+       font-size:16px;line-height:1.7;letter-spacing:.02em}
+  .band{height:6px;background:var(--mokujiki-500)}
+  .wrap{max-width:960px;margin:0 auto;padding:0 16px}
+  @media(min-width:768px){.wrap{padding:0 32px}}
+  h1{font-family:var(--serif);font-size:32px;line-height:1.5;letter-spacing:.04em;margin:40px 0 8px}
+  h2{font-size:24px;line-height:1.5;margin:64px 0 16px}
+  h3{font-size:20px;line-height:1.5;margin:40px 0 16px;color:var(--mokujiki-400)}
+  p.lead{color:var(--on-surface-variant);margin:0 0 16px}
+  .disclaimer{font-size:14px;color:var(--on-surface-variant);border-left:3px solid var(--outline-variant);padding:4px 0 4px 16px}
+  a{color:var(--link);text-decoration:underline;text-underline-offset:3px}
+  :focus-visible{outline:2px solid var(--ai-700);outline-offset:2px}
+
+  /* ===== 色見本 ===== */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+  .sw{background:#fff;border:1px solid var(--outline-variant);border-radius:8px;overflow:hidden}
+  .sw .chip{height:72px}
+  .sw .meta{padding:8px 16px 12px;font-size:14px;line-height:1.6}
+  .sw .name{font-weight:700}
+  .sw .mono{font-family:ui-monospace,Menlo,monospace;font-size:13px;color:var(--on-surface-variant)}
+  table{border-collapse:collapse;width:100%;font-size:14px;background:#fff}
+  th,td{border-bottom:1px solid var(--outline-variant);padding:8px 12px;text-align:left;vertical-align:top}
+  th{background:var(--surface-container);font-weight:700}
+  .ok{color:var(--success);font-weight:700}
+  .ng{color:var(--error);font-weight:700}
+  .dot{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:6px;border:1px solid rgba(0,0,0,.15)}
+  .scroll{overflow-x:auto}
+
+  /* ===== サンプル画面（DESIGN.md の Components に従う） ===== */
+  .device{border:1px solid var(--outline-variant);border-radius:8px;overflow:hidden;background:var(--surface)}
+  .s-header{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;
+            border-bottom:1px solid var(--outline-variant);background:var(--surface)}
+  .s-logo{font-family:var(--serif);font-weight:700;font-size:20px;letter-spacing:.06em}
+  .s-nav{display:flex;gap:24px;font-size:14px;font-weight:700}
+  .s-nav span{padding:20px 0 17px}
+  .s-nav .current{border-bottom:3px solid var(--primary)}
+  .s-body{padding:24px}
+  .notice{background:var(--kinpaku-400);color:var(--on-surface);border-radius:4px;padding:16px 24px;margin-bottom:24px}
+  .notice strong{margin-right:8px}
+  .s-title{font-family:var(--serif);font-size:32px;line-height:1.5;letter-spacing:.04em;margin:0 0 8px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin:24px 0 40px}
+  .card{background:var(--surface-container);border-radius:8px;padding:24px}
+  .card h4{margin:0 0 8px;font-size:18px;color:var(--mokujiki-400)}
+  .card p{margin:0;font-size:14px;color:var(--on-surface-variant)}
+  form{max-width:520px}
+  label{display:block;font-weight:700;font-size:14px;margin:16px 0 8px}
+  .req{font-weight:400;color:var(--on-surface-variant);margin-left:8px}
+  input[type=text],input[type=email]{width:100%;height:48px;padding:12px 16px;font:inherit;color:var(--on-surface);
+        background:#fff;border:1px solid var(--outline);border-radius:4px}
+  input.is-error{border:2px solid var(--error)}
+  .msg-error,.msg-ok{display:flex;gap:8px;align-items:flex-start;font-size:14px;font-weight:700;margin-top:8px}
+  .msg-error{color:var(--error)} .msg-ok{color:var(--success)}
+  .msg-error svg,.msg-ok svg{flex:none;margin-top:3px}
+  .actions{display:flex;gap:16px;flex-wrap:wrap;margin-top:24px}
+  .btn{height:48px;padding:0 24px;border-radius:4px;font:700 16px/1 var(--sans);letter-spacing:.04em;cursor:pointer}
+  .btn-primary{background:var(--primary);color:#fff;border:0}
+  .btn-primary:hover{background:var(--primary-hover)}
+  .btn-secondary{background:var(--surface);color:var(--on-surface);border:1px solid var(--outline)}
+  .btn-secondary:hover{background:var(--surface-container)}
+  .s-footer{background:var(--surface-container-high);color:var(--on-surface-variant);padding:24px;font-size:14px}
+  footer.page{margin:64px 0 40px;font-size:14px;color:var(--on-surface-variant)}
+</style>
+</head>
+<body>
+<div class="band" aria-hidden="true"></div>
+<div class="wrap">
+  <h1>金沢版 DESIGN.md「木色（もくじき）」</h1>
+  <p class="lead">金沢市景観計画の色彩基準を、Web画面のデザインシステムに置き換えた試作です。このページ自体も DESIGN.md のトークンだけで組んでいます。</p>
+  <p class="disclaimer">金沢市の公式なデザインシステムではありません。講演「画像生成AIでDX」のデモとして作った非公式の試作です。下のサンプル画面の内容もすべて架空です。</p>
+
+  <h2>1. 出発点：景観計画の「推奨色」</h2>
+  <p>景観計画は、伝統的な街並みの「地」になる色を木色とし、外壁の推奨範囲を<strong>色相 5YR〜2.5Y、明度 4〜7、彩度 2〜4</strong>と定めています。この範囲をそのまま色に変換したのが下の表です（彩度3の列）。</p>
+  <div class="scroll"><table id="range"><thead><tr><th>色相＼明度</th><th>4</th><th>5</th><th>6</th><th>7</th></tr></thead><tbody></tbody></table></div>
+
+  <h2>2. 決めた色（トークン）</h2>
+  <p>推奨色を中心に、文字用に暗い方向、背景用に明るい方向へ広げました。アクセント色も含めて、景観計画の<strong>禁止色ルール</strong>（R・YR系は彩度6まで、Y系は4まで、その他は2まで）に収まるようにしています。</p>
+  <div class="swatches" id="swatches"></div>
+
+  <h3>禁止色ルールでの検査（HEX をマンセル値に戻して確認）</h3>
+  <p>比較のため、Webでよく使われる色も同じ方法で検査しました。</p>
+  <div class="scroll"><table id="check"><thead><tr><th>色</th><th>逆変換したマンセル値</th><th>上限彩度</th><th>判定</th></tr></thead><tbody></tbody></table></div>
+
+  <h3>文字の読みやすさ（WCAG コントラスト比）</h3>
+  <div class="scroll"><table id="contrast"><thead><tr><th>組み合わせ</th><th>比</th><th>本文 4.5以上</th><th>線・大文字 3.0以上</th><th>用途</th></tr></thead><tbody></tbody></table></div>
+
+  <h2>3. DESIGN.md に従って作った画面（架空）</h2>
+  <p>DESIGN.md の Components と Do's and Don'ts だけを守って組んだ例です。紅殻は「主要ボタン」と「現在地の下線」の2か所だけに使っています。</p>
+
+  <div class="device">
+    <div class="band" aria-hidden="true"></div>
+    <div class="s-header">
+      <div class="s-logo">まちのお知らせ</div>
+      <nav class="s-nav" aria-label="サンプルのメニュー"><span>くらし</span><span class="current" aria-current="page">事業者の方へ</span><span>観光</span></nav>
+    </div>
+    <div class="s-body">
+      <div class="notice" role="note"><strong>お知らせ</strong>申込受付は締切日の17時までです（架空の例）。</div>
+      <h3 class="s-title" style="color:var(--on-surface);margin-top:0">事業承継セミナー 参加申込</h3>
+      <p style="color:var(--on-surface-variant);margin:0">後継ぎ・引き継ぎを考えはじめた事業者の方向けのセミナーです（このページの内容は架空です）。</p>
+      <div class="cards">
+        <div class="card"><h4>日時</h4><p>12月の平日 14:00〜16:00（例）</p></div>
+        <div class="card"><h4>会場</h4><p>市内の会議室（例）／オンライン併用</p></div>
+        <div class="card"><h4>参加費</h4><p>無料・定員30名（例）</p></div>
+      </div>
+      <form onsubmit="event.preventDefault();demoSubmit()">
+        <label for="f-name">お名前<span class="req">必須</span></label>
+        <input id="f-name" type="text" autocomplete="off">
+        <label for="f-mail">メールアドレス<span class="req">必須</span></label>
+        <input id="f-mail" type="email" class="is-error" value="sample@" aria-describedby="mail-err" aria-invalid="true" autocomplete="off">
+        <div class="msg-error" id="mail-err"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.5" fill="currentColor"/><rect x="7" y="3.5" width="2" height="6" fill="#fff"/><rect x="7" y="10.8" width="2" height="2" fill="#fff"/></svg>メールアドレスの形式が正しくありません（エラー表示の例）</div>
+        <div class="actions">
+          <button class="btn btn-primary" type="submit">申し込む</button>
+          <button class="btn btn-secondary" type="button">内容を確認する</button>
+        </div>
+        <div class="msg-ok" id="ok" hidden><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.5" fill="currentColor"/><path d="M4.5 8.2l2.3 2.3 4.7-4.8" stroke="#fff" stroke-width="2" fill="none"/></svg>これはデモです。実際には送信されません（成功表示の例）</div>
+      </form>
+      <p style="margin-top:24px"><a href="#">詳しい案内を見る（リンクの例）</a></p>
+    </div>
+    <div class="s-footer">区切り帯（section-band）の例：問い合わせ先や補足情報をここにまとめます。</div>
+  </div>
+
+  <footer class="page">
+    出典：金沢市景観計画「色彩基準等について」／金沢市屋外広告物ガイドライン／デジタル庁デザインシステム design-tokens（MIT）／google-labs-code/design.md（Apache 2.0）。
+    色の変換は colour-science 0.4.7（Munsell Renotation、C光源→D65、CAT02）。
+  </footer>
+</div>
+
+<script>
+  // munsell.py / check_kinshi.py の計算結果を転記
+  const range = {
+    "5YR":["#795947","#927361","#AC8D7A","#C7A793"],
+    "7.5YR":["#775B44","#90745E","#AB8E76","#C5A88F"],
+    "10YR":["#735C41","#8D765A","#A79072","#C2AA8B"],
+    "2.5Y":["#705E3E","#8A7757","#A3916F","#BEAC87"]
+  };
+  const tb = document.querySelector('#range tbody');
+  for (const [hue, arr] of Object.entries(range)) {
+    tb.insertAdjacentHTML('beforeend', `<tr><th>${hue}</th>${arr.map((h,i)=>
+      `<td><span class="dot" style="background:${h}"></span><span style="font-family:ui-monospace,monospace;font-size:13px">${h}</span><br><small>${hue} ${i+4}/3</small></td>`).join('')}</tr>`);
+  }
+  const tokens = [
+    ["mokujiki-950","生成り（背景）","7.5YR 9.6/0.5","#F6F3F1"],
+    ["mokujiki-900","生成り濃（カード）","7.5YR 9.2/1","#F0E7DF"],
+    ["mokujiki-800","区切り面","7.5YR 8.5/1.5","#E2D3C5"],
+    ["mokujiki-700","木色・淡（罫線）","7.5YR 7/2","#BEAA99"],
+    ["mokujiki-500","木色（代表色）","7.5YR 5/3","#90745E"],
+    ["mokujiki-400","木色・濃","7.5YR 4/3","#775B44"],
+    ["sumi-700","墨・淡（補足文）","7.5YR 3/1.5","#53453B"],
+    ["sumi-900","墨（本文）","7.5YR 2/1","#382F2A"],
+    ["bengara-600","紅殻（アクセント）","10R 3/6","#733529"],
+    ["bengara-700","紅殻・濃（押下）","10R 2.5/5","#612C26"],
+    ["kinpaku-400","金箔（お知らせ面）","2.5Y 7/4","#C3AB7B"],
+    ["ai-700","藍（リンク）","5PB 3/2","#404857"],
+    ["koke-700","苔（成功）","5GY 3.5/2","#505642"],
+    ["shu-500","弁柄朱（エラー）","5R 4/6","#8F4D4C"]
+  ];
+  document.getElementById('swatches').innerHTML = tokens.map(([k,n,m,h])=>
+    `<div class="sw"><div class="chip" style="background:${h}"></div><div class="meta"><div class="name">${n}</div><div class="mono">${k}<br>${h}　${m}</div></div></div>`).join('');
+
+  const check = [
+    ["#733529","紅殻","10.0R 3.0/5.9",6,true],
+    ["#C3AB7B","金箔","2.5Y 7.0/4.0",4,true],
+    ["#404857","藍","4.8PB 3.0/2.0",2,true],
+    ["#505642","苔","4.6GY 3.5/2.0",2,true],
+    ["#8F4D4C","弁柄朱","4.9R 4.0/6.0",6,true],
+    ["#0066CC","よくあるリンクの青","6.0PB 4.4/14.6",2,false],
+    ["#E60012","よくある強調の赤","7.7R 4.7/18.3",6,false],
+    ["#FFD400","よくある注意の黄","4.2Y 8.6/12.2",4,false]
+  ];
+  document.querySelector('#check tbody').innerHTML = check.map(([h,n,m,l,ok])=>
+    `<tr><td><span class="dot" style="background:${h}"></span>${n} <small>${h}</small></td><td>${m}</td><td>${l}</td><td class="${ok?'ok':'ng'}">${ok?'○ ルール内':'× 禁止色の範囲'}</td></tr>`).join('');
+
+  function lum(h){const c=[1,3,5].map(i=>parseInt(h.substr(i,2),16)/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4));return .2126*c[0]+.7152*c[1]+.0722*c[2];}
+  function ratio(a,b){const[x,y]=[lum(a),lum(b)].sort((p,q)=>q-p);return (x+.05)/(y+.05);}
+  const pairs = [
+    ["#382F2A","#F6F3F1","墨 / 生成り","本文"],
+    ["#53453B","#F6F3F1","墨・淡 / 生成り","補足文"],
+    ["#FFFFFF","#733529","白 / 紅殻","主要ボタン"],
+    ["#404857","#F6F3F1","藍 / 生成り","リンク"],
+    ["#382F2A","#C3AB7B","墨 / 金箔","お知らせ帯"],
+    ["#90745E","#F6F3F1","木色 / 生成り","入力欄の枠線（文字には不可）"],
+    ["#BEAA99","#F6F3F1","木色・淡 / 生成り","装飾の罫線のみ"]
+  ];
+  document.querySelector('#contrast tbody').innerHTML = pairs.map(([f,b,n,u])=>{const r=ratio(f,b);
+    return `<tr><td><span class="dot" style="background:${f}"></span><span class="dot" style="background:${b}"></span>${n}</td><td>${r.toFixed(2)}</td><td class="${r>=4.5?'ok':'ng'}">${r>=4.5?'○':'×'}</td><td class="${r>=3?'ok':'ng'}">${r>=3?'○':'×'}</td><td>${u}</td></tr>`}).join('');
+
+  function demoSubmit(){document.getElementById('ok').hidden=false;}
+</script>
+</body>
+</html>
