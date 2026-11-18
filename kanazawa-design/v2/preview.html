@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>金沢版DESIGN.md v2「公式サイト調」プレビュー（非公式版）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap">
+<style>
+  /* DESIGN.md v2 のトークンだけで組む */
+  :root{
+    --shu-600:#990000; --shu-700:#7A0000; --sumi-900:#333333; --hai-600:#666666;
+    --kinari-50:#F8F5EE; --suna-100:#F1E9D5; --kin-300:#E8BB5E; --kin-700:#8A6514;
+    --ai-600:#2D5F92; --sakai-500:#78776B; --error-600:#B81C22;
+    --primary:var(--shu-600); --primary-hover:var(--shu-700); --on-primary:#fff;
+    --surface:#fff; --surface-container:var(--kinari-50); --surface-container-high:var(--suna-100);
+    --on-surface:var(--sumi-900); --on-surface-variant:var(--hai-600);
+    --outline:var(--sakai-500); --link:var(--ai-600); --error:var(--error-600);
+    --font:"Yu Gothic","YuGothic","Noto Sans JP","Hiragino Sans",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--font);color:var(--on-surface);background:var(--surface);font-size:16px;line-height:1.7}
+  .unofficial{background:var(--sumi-900);color:#fff;padding:12px 16px;font-size:14px;font-weight:700;line-height:1.6;text-align:center}
+  .wrap{max-width:960px;margin:0 auto;padding:0 16px}
+  .band{background:var(--surface-container);padding:64px 16px}
+  .block{padding:64px 0}
+  /* 見出し：中央そろえ＋英語の副題＋金の市松 */
+  .sh{text-align:center;margin:0 0 32px}
+  .sh h2{font-size:22px;font-weight:700;line-height:1.45;letter-spacing:.06em;margin:0}
+  .sh .en{display:block;font-size:11px;letter-spacing:.04em;margin-top:4px}
+  .ichimatsu{width:48px;height:8px;margin:10px auto 0;background:
+    repeating-linear-gradient(90deg,var(--kin-300) 0 8px,transparent 8px 16px)}
+  h1{font-size:29px;line-height:1.4;letter-spacing:.04em;margin:0 0 8px}
+  .lead{font-size:18px;margin:0}
+  .sub{color:var(--on-surface-variant);font-size:14px;margin:0}
+  /* 色見本 */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+  .sw{border:1px solid #e3ddd0;border-radius:5px;overflow:hidden;background:#fff;font-size:13px}
+  .sw b{display:block;height:56px}
+  .sw p{margin:0;padding:8px 10px;line-height:1.5}
+  table{border-collapse:collapse;width:100%;font-size:14px;background:#fff}
+  th,td{text-align:left;padding:8px 12px;border-bottom:1px solid #e3ddd0}
+  th{background:var(--surface-container-high)}
+  /* タブ */
+  .tabs{display:flex;gap:4px;border-bottom:3px solid var(--primary)}
+  .tab{font-size:17px;font-weight:700;letter-spacing:.04em;padding:12px 24px;border-radius:3px 3px 0 0;background:var(--primary);color:var(--on-primary)}
+  .tab.on{background:var(--surface);color:var(--primary);border:1px solid var(--outline);border-top:3px solid var(--primary);border-bottom:none;margin-bottom:-3px;padding-bottom:15px}
+  .panel{background:var(--surface-container-high);padding:24px}
+  .card{background:var(--surface);border-radius:5px;padding:16px 24px;margin:0 0 12px}
+  .date{color:var(--primary);font-weight:700;font-size:14px;letter-spacing:.04em;margin-right:12px}
+  a{color:var(--link);text-decoration:underline}
+  /* ボタン */
+  .btns{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .btn{font:inherit;font-size:14px;font-weight:700;letter-spacing:.04em;height:48px;cursor:pointer}
+  .btn-primary{background:var(--primary);color:var(--on-primary);border:none;border-radius:5px;padding:12px 32px}
+  .btn-primary:hover{background:var(--primary-hover)}
+  .btn-outline{background:var(--surface);color:var(--on-surface);border:1px solid var(--primary);border-radius:3px;padding:12px 48px 12px 24px;position:relative}
+  .btn-outline::after{content:"›";position:absolute;right:12px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:16px;line-height:20px;text-align:center}
+  /* フォーム */
+  .form{background:var(--surface);border-radius:5px;padding:24px;display:flex;flex-direction:column;gap:16px}
+  label{font-size:14px;font-weight:700;letter-spacing:.04em;display:block;margin-bottom:4px}
+  .req{color:var(--primary);font-weight:700;margin-left:6px;text-decoration:underline}
+  input{font:inherit;width:100%;height:48px;padding:12px 16px;border:1px solid var(--outline);border-radius:5px}
+  input.ng{border:2px solid var(--error)}
+  .err{color:var(--error);font-weight:700;font-size:14px;margin:6px 0 0}
+  .err::before{content:"⚠ "}
+  dl{display:grid;grid-template-columns:7em 1fr;gap:6px 12px;margin:0}
+  dt{font-weight:700}
+  dd{margin:0}
+  .foot{font-size:13px;color:var(--on-surface-variant);padding:32px 16px;text-align:center}
+</style>
+</head>
+<body>
+<div class="unofficial">非公式版です。金沢市が作成・公開したものではありません。講演のデモとして、金沢市公式ホームページの見た目を参考に作った試作です（市章・公式ロゴ・キャラクターは使っていません）。下のサンプル画面の内容はすべて架空です。</div>
+
+<div class="band">
+  <div class="wrap">
+    <h1>金沢版 DESIGN.md v2「公式サイト調」</h1>
+    <p class="lead">白地に深紅、ところどころに金と生成り。このページも DESIGN.md v2 のトークンだけで組んでいます。</p>
+    <p class="sub">v1「木色」は建物の外壁向けの景観基準を元にしたため、印刷物には淡すぎました。v2 は画面と印刷物のために作られたもの（公式ホームページの配色と、カラーユニバーサルデザインのルール）を元にしています。</p>
+  </div>
+</div>
+
+<div class="wrap block">
+  <div class="sh"><h2>色</h2><span class="en">COLORS</span><div class="ichimatsu"></div></div>
+  <div class="swatches">
+    <div class="sw"><b style="background:#990000"></b><p><strong>深紅</strong><br>#990000<br>押す場所・強調</p></div>
+    <div class="sw"><b style="background:#7A0000"></b><p><strong>深紅・濃</strong><br>#7A0000<br>押したとき</p></div>
+    <div class="sw"><b style="background:#333333"></b><p><strong>墨</strong><br>#333333<br>本文</p></div>
+    <div class="sw"><b style="background:#666666"></b><p><strong>灰</strong><br>#666666<br>補足文</p></div>
+    <div class="sw"><b style="background:#F8F5EE"></b><p><strong>生成り</strong><br>#F8F5EE<br>大きな面</p></div>
+    <div class="sw"><b style="background:#F1E9D5"></b><p><strong>砂</strong><br>#F1E9D5<br>まとまりの面</p></div>
+    <div class="sw"><b style="background:#E8BB5E"></b><p><strong>金</strong><br>#E8BB5E<br>飾り専用</p></div>
+    <div class="sw"><b style="background:#8A6514"></b><p><strong>金・濃</strong><br>#8A6514<br>金色の文字</p></div>
+    <div class="sw"><b style="background:#2D5F92"></b><p><strong>藍</strong><br>#2D5F92<br>リンク</p></div>
+    <div class="sw"><b style="background:#B81C22"></b><p><strong>警告</strong><br>#B81C22<br>エラー</p></div>
+  </div>
+  <p class="sub" style="margin-top:16px">深紅で文字を強調するときは、太字・下線・囲みを必ず併用します（色だけで意味を伝えない）。</p>
+</div>
+
+<div class="band">
+  <div class="wrap">
+    <div class="sh"><h2>文字の読みやすさ</h2><span class="en">CONTRAST</span><div class="ichimatsu"></div></div>
+    <table id="contrast"><thead><tr><th>組み合わせ</th><th>コントラスト比</th><th>本文 4.5以上</th><th>用途</th></tr></thead><tbody></tbody></table>
+  </div>
+</div>
+
+<div class="wrap block">
+  <div class="sh"><h2>DESIGN.md に従って作った画面（架空）</h2><span class="en">SAMPLE</span><div class="ichimatsu"></div></div>
+  <div class="tabs"><span class="tab on">お知らせ</span><span class="tab">事業者の方へ</span><span class="tab">イベント</span></div>
+  <div class="panel">
+    <div class="card"><span class="date">12月の平日（例）</span>事業承継セミナーの参加申込を受け付けています（架空の例）</div>
+    <div class="card"><span class="date">締切日の17時（例）</span>申込受付は締切日の17時までです（架空の例）</div>
+    <div class="btns" style="justify-content:flex-end"><button class="btn btn-outline" type="button">お知らせ一覧</button></div>
+  </div>
+
+  <div style="height:40px"></div>
+  <div class="panel">
+    <h1 style="font-size:22px">事業承継セミナー 参加申込</h1>
+    <p class="sub" style="margin-bottom:16px">後継ぎ・引き継ぎを考えはじめた事業者の方向けのセミナーです（このページの内容は架空です）。</p>
+    <div class="form">
+      <dl><dt>日時</dt><dd>12月の平日 14:00〜16:00（例）</dd><dt>会場</dt><dd>市内の会議室（例）</dd><dt>参加費</dt><dd>無料・定員30名（例）</dd></dl>
+      <div><label>お名前<span class="req">必須</span></label><input type="text" placeholder="例：金沢 花子"></div>
+      <div><label>メールアドレス<span class="req">必須</span></label><input class="ng" type="text" value="example@"><p class="err">メールアドレスの形式が正しくありません（エラー表示の例）</p></div>
+      <div class="btns"><button class="btn btn-primary" type="button" onclick="this.nextElementSibling.textContent='これはデモです。実際には送信されません。'">申し込む</button><span class="sub"></span></div>
+      <p style="margin:0"><a href="#">詳しい案内を見る（リンクの例）</a></p>
+    </div>
+  </div>
+</div>
+
+<div class="foot">出典：金沢市公式ホームページ（2026年11月18日にトップページの配色・書体・角丸を観察）／金沢市カラーユニバーサルデザインガイドライン／google-labs-code/design.md（Apache 2.0）。<br>非公式の試作です。金沢市の公式なデザインシステムやガイドラインではありません。</div>
+
+<script>
+// WCAG のコントラスト比を、その場で計算して表示する
+function lum(h){const c=[1,3,5].map(i=>parseInt(h.substr(i,2),16)/255).map(v=>v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4));return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2]}
+function ratio(a,b){const x=lum(a),y=lum(b);return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05)}
+const rows=[['墨 / 白','#333333','#FFFFFF','本文'],['墨 / 生成り','#333333','#F8F5EE','帯の中の本文'],['灰 / 白','#666666','#FFFFFF','補足文'],
+  ['白 / 深紅','#FFFFFF','#990000','塗りのボタン・タブ'],['深紅 / 白','#990000','#FFFFFF','強調の日付（太字と併用）'],['藍 / 白','#2D5F92','#FFFFFF','リンク（下線つき）'],
+  ['金・濃 / 白','#8A6514','#FFFFFF','金色の文字'],['墨 / 金','#333333','#E8BB5E','金の面の上の文字'],['金 / 白','#E8BB5E','#FFFFFF','飾りのみ（文字に使わない）']];
+const tb=document.querySelector('#contrast tbody');
+for(const [n,f,b,u] of rows){const r=ratio(f,b);tb.insertAdjacentHTML('beforeend',`<tr><td><span style="display:inline-block;padding:2px 8px;border-radius:3px;background:${b};color:${f};border:1px solid #ddd;font-weight:700">${n}</span></td><td>${r.toFixed(2)}</td><td>${r>=4.5?'○':'×'}</td><td>${u}</td></tr>`)}
+</script>
+</body>
+</html>
