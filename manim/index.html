@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>manim で作った解説動画 | 画像生成AIを社内業務に取り入れてみよう！</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap">
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:'Noto Sans JP',sans-serif; color:#000; background:#fff; }
+  main { max-width:760px; margin:0 auto; padding:32px 20px 48px; }
+  .ey { font-size:14px; font-weight:700; border-left:10px solid #d2da22; padding-left:10px; margin:0 0 12px; }
+  h1 { font-size:26px; line-height:1.4; font-weight:900; margin:0 0 12px; }
+  h2 { font-size:20px; margin:36px 0 8px; border-top:8px solid #000; padding-top:12px; }
+  p, li { font-size:16px; line-height:1.8; }
+  p { margin:0 0 12px; }
+  video { width:100%; height:auto; border:2px solid #b5b5b6; background:#000; }
+  code { background:#efefef; padding:1px 6px; font-size:14px; }
+  .note { font-size:13px; color:#595757; line-height:1.7; }
+  a { color:#2D5F92; }
+</style>
+</head>
+<body>
+<main>
+  <p class="ey"><a href="../">体験ページのトップへ</a></p>
+  <h1>manim で作った解説動画</h1>
+  <p>講演で流した2本の動画です。どちらも、動画編集ソフトで描いたのではなく、Python のライブラリ <a href="https://www.manim.community/">manim</a> のプログラムから作っています。文字や数字はプログラムに書いたとおりに出るので、画像生成AIのように崩れません。講演の第2部の「AIがソフトを操作して作る」やり方の実例でもあります。</p>
+
+  <h2 id="diffusion">画像生成AIは、ノイズから少しずつ絵を戻していく（約2分13秒）</h2>
+  <video controls preload="none" poster="diffusion/poster.jpg" src="diffusion/diffusion.mp4"></video>
+  <p>拡散モデル（逆拡散）の考え方の解説です。音声はありません。講演では、<a href="diffusion/narration.md">ナレーション原稿</a>を見ながら話しました。</p>
+  <p class="note">画像へのノイズの混合、ぼかし、2次元の点の動きは実際に計算したものです。「猫・車・海」は説明用のたとえで、実際の画像生成モデルは使っていません。<br>コード：<a href="https://github.com/HUclasses/202611genAIDX/blob/main/manim/diffusion/lecture.py">lecture.py</a>（シーン）／<a href="https://github.com/HUclasses/202611genAIDX/blob/main/manim/diffusion/common.py">common.py</a>（共通部品と計算）</p>
+
+  <h2 id="process">工程をもう一度：AIに任せるのは「案」まで（23秒）</h2>
+  <video controls preload="none" poster="process/poster.jpg" src="process/process_recap.mp4"></video>
+  <p>ポスター作りの9つの工程のうち、AIに案を出させる工程（⑤ラフ・⑥カンプ）と、人が持つ工程（②⑦⑧⑨）を示す動画です。AI（Claude）が manim のコードを書いて作りました。</p>
+  <p class="note">コード：<a href="https://github.com/HUclasses/202611genAIDX/blob/main/manim/process/process.py">process.py</a></p>
+
+  <h2>自分で動かすには</h2>
+  <p>manim をインストールして、次のように実行します（日本語フォントに Noto Sans CJK JP を使っています）。</p>
+  <p><code>manim -qh lecture.py L0Title L1Forward L2Training L3Blur L4Reverse L5Prompt L6Summary</code><br><code>manim -qh process.py Process</code></p>
+  <p class="note">確認用の低画質なら <code>-qh</code> を <code>-ql</code> に。lecture.py は数式なしですが、common.py と同じフォルダに置いてください。</p>
+</main>
+</body>
+</html>
