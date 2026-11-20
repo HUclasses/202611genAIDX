@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>赤入れプロンプト | 画像生成AIを社内業務に取り入れてみよう！</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap">
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:'Noto Sans JP',sans-serif; color:#000; background:#fff; }
+  main { max-width:760px; margin:0 auto; padding:32px 20px 48px; }
+  .ey { font-size:14px; font-weight:700; border-left:10px solid #d2da22; padding-left:10px; margin:0 0 12px; }
+  h1 { font-size:26px; line-height:1.4; font-weight:900; margin:0 0 12px; }
+  h2 { font-size:20px; margin:32px 0 8px; border-top:8px solid #000; padding-top:12px; }
+  p, li { font-size:16px; line-height:1.8; }
+  p { margin:0 0 12px; }
+  pre { white-space:pre-wrap; word-break:break-all; line-break:strict; font-family:'Noto Sans JP',sans-serif; font-size:15px; line-height:1.8; background:#efefef; border:2px solid #000; padding:16px 18px; margin:0; }
+  button { font-family:inherit; font-size:16px; font-weight:700; background:#000; color:#fff; border:0; padding:10px 20px; margin:12px 0; cursor:pointer; }
+  button:hover { background:#d2da22; color:#000; }
+  .note { font-size:13px; color:#595757; line-height:1.7; }
+  a { color:#2D5F92; }
+</style>
+</head>
+<body>
+<main>
+  <p class="ey"><a href="../">体験ページのトップへ</a></p>
+  <h1>赤入れプロンプト</h1>
+  <p>ポスターやチラシの画像を添付して、このプロンプトを貼り付けると、<b>左に手書き風の赤ペン添削、右に改善案</b>を並べた比較画像を作ってもらえます（ChatGPT など、画像を読み取って画像を作れるAI向け）。</p>
+  <button id="copy" type="button">プロンプトをコピー</button>
+  <pre id="prompt">添付したポスター・チラシを読み取り、手書き風の赤ペン添削と改善案を、左右に並べた1枚の比較画像にしてください。左右の下には、共通のメモ欄も付けてください。
+
+【最初に内容を確認】
+デザインを変える前に、タイトル、日時、会場、料金、出演者、連絡先、注意事項を読み取ってください。判読できない重要情報は推測で補わず、確認が必要な箇所として示してください。
+
+【左：元画像＋手書き風の赤ペン添削】
+・元画像をできるだけそのまま残してください。
+・改善に効果のある指摘を3～5点に絞ってください。
+・コメントは、赤ペンで直接書き込んだような自然な手書き風の日本語にしてください。
+・囲み、下線、矢印も手描き風にしてください。整った四角いコメント枠は使わないでください。
+・指摘と対象の対応を明確にし、重要な文字や写真を覆わないでください。
+
+【右：改善案】
+・元の情報と目的を保ち、情報の優先順位、文字サイズ、配置、余白、色のコントラストを改善してください。
+・見出しと本文の幅、左右の端、基準線を揃えてください。
+・元の親しみやすさや地域性など、残す価値のある特徴を活かしてください。
+・右側には赤ペンや批評コメントを入れないでください。
+・日時、数字、固有名詞、連絡先を勝手に変更・追加しないでください。
+・人物・商品・作品の写真やロゴを別物に描き直さないでください。保持できない場合は配置枠にして、その旨を示してください。
+・QRコードは生成せず、元の実データを使用してください。使用できない場合は「原本QRを配置」と明示してください。
+
+【下部メモ】
+左右全体の幅に揃えたメモ欄を設け、次の3項目を各1～2点、簡潔に書いてください。
+① 改善した点：何を、なぜ変えたか
+② 残した良さ：元の特徴で活かしたもの
+③ 採用前の確認：未確定情報、素材の差し替え、失われた可能性のある良さ
+
+【仕上げ】
+・左右の画像は同じ縮尺と高さで配置してください。
+・文字切れ、重なり、情報の欠落、矢印の対応を確認してください。
+・おしゃれにすること自体ではなく、見る人が必要な情報を見つけ、行動しやすくなることを目指してください。
+・検証できていない部分は、検証済みと表現しないでください。
+
+【時刻表・料金表などの場合】
+表の全行・全列・空欄・記号を先に読み取り、確定データとして保持してください。正確な数値表は画像生成で描き直さず、確定データから組版してください。それができない場合は、数値の正確性を保証しないデザイン検討案として示してください。</pre>
+  <button id="copy2" type="button">プロンプトをコピー</button>
+
+  <h2>使うときに気をつけること</h2>
+  <ul>
+    <li><b>先に自分で赤ペン。</b>AIの指摘を見る前に、自分で気になる所を書き出しておくと、比べる相手ができます。</li>
+    <li><b>右の改善案は、そのまま使わない。</b>配置や強弱の見当をつける「ラフ」として見て、本番は元のファイル（Word、PowerPoint など）で人が直します。</li>
+    <li><b>元と並べて確かめる。</b>日時・数字・連絡先・人名・経歴・写真が、指示していないのに変わっていることがあります。</li>
+    <li><b>何を入れてよいかは、職場で決める。</b>顔写真や個人の情報、社外秘の資料は、使うサービスの扱い（学習に使われるかなど）を確かめてから。</li>
+  </ul>
+  <p class="note">プロンプトは <a href="prompt.md">prompt.md</a> としても置いています。自由に書き換えて使ってください。講演のワークで使ったもので、どのAIでも同じ結果になるとは限りません。</p>
+</main>
+<script>
+  function copy(btn){
+    const t=document.getElementById('prompt').textContent;
+    const done=()=>{const o=btn.textContent;btn.textContent='コピーしました';setTimeout(()=>btn.textContent=o,1500);};
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(done).catch(()=>fallback(t,done));}else{fallback(t,done);}
+  }
+  function fallback(t,done){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');done();}catch(e){}a.remove();}
+  document.getElementById('copy').onclick=e=>copy(e.target);
+  document.getElementById('copy2').onclick=e=>copy(e.target);
+</script>
+</body>
+</html>
